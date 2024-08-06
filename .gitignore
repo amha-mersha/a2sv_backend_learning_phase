@@ -1,2 +1,6 @@
+# Ignore main.go in the root directory
+/main.go
 TaskThree.go
-main.go
+
+# Unignore main.go files in subdirectories
+!library_management/main.go
