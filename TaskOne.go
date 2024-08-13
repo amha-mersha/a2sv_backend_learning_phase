@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -15,20 +17,23 @@ func calculateAverage(data ...float64) float64 {
 	return total / count
 }
 
+var reader = bufio.NewReader(os.Stdin)
+
 func main() {
 	fmt.Println("Hello there!")
 	fmt.Print("Enter you name: ")
-	var name string
-	_, err := fmt.Scanln(&name)
+	name, err := reader.ReadString('\n')
 	if err != nil {
 		fmt.Println("Error reading name")
 	}
-	for strings.Trim(name, "") == "" {
+	name = name[:len(name)-1]
+	for strings.Trim(name, " ") == "" {
 		fmt.Printf("Enter a correct name: ")
-		_, err = fmt.Scanln(&name)
+		name, err = reader.ReadString('\n')
 		if err != nil {
-			fmt.Println("Error while reading name")
+			fmt.Println("Error reading name")
 		}
+		name = name[:len(name)-1]
 	}
 
 	var subjectCount int
@@ -52,30 +57,35 @@ func main() {
 	scores := make([]float64, subjectCount)
 	for index := 0; index < subjectCount; index++ {
 		var (
-			curr string
 			temp float64
+			curr string
 		)
 
 		for {
 			fmt.Printf("Enter the %v subject: ", index+1)
-			_, err = fmt.Scanln(&curr)
+			curr, err = reader.ReadString('\n')
 			if err != nil {
 				fmt.Println("Error while reading name.")
 				continue
 			}
 
-			if strings.Trim(curr, " ") == "" {
+			if strings.TrimSpace(curr) == "" {
 				fmt.Println("Invalid subject name.")
 				continue
 			}
+			fmt.Println("subject name: ", curr)
 			break
 		}
 		for {
 			var input string
 			fmt.Printf("Enter the score for the %v subject: ", index+1)
-			_, err = fmt.Scan(&input)
+			_, err = fmt.Scanln(&input)
 			if err != nil {
 				fmt.Println("Error while reading the score of the subject")
+				continue
+			}
+			if strings.TrimSpace(input) == "" {
+				fmt.Println("Invalid value.")
 				continue
 			}
 
