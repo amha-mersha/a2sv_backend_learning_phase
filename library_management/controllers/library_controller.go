@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"library_management/models"
+	"library_management/services"
 	"os"
 	"strconv"
 	"strings"
@@ -11,7 +12,7 @@ import (
 
 var reader = bufio.NewReader(os.Stdin)
 
-func handleADD(lib models.Library) error {
+func handleADD(lib services.LibraryManager) error {
 	var (
 		title  string
 		id     int64
@@ -41,7 +42,7 @@ func handleADD(lib models.Library) error {
 	return nil
 }
 
-func handleREMOVE(lib models.Library) error {
+func handleREMOVE(lib services.LibraryManager) error {
 	fmt.Println("Enter the ID of the book:")
 	temp, _ := reader.ReadString('\n')
 	bookId, _ := strconv.ParseInt(temp, 10, 64)
@@ -49,7 +50,7 @@ func handleREMOVE(lib models.Library) error {
 	return nil
 }
 
-func handleBORROW(lib models.Library) error {
+func handleBORROW(lib services.LibraryManager) error {
 	fmt.Printf("Enter the ID of the book:")
 	temp, _ := reader.ReadString('\n')
 	temp = strings.TrimSpace(temp)
@@ -66,7 +67,7 @@ func handleBORROW(lib models.Library) error {
 	return nil
 }
 
-func handleRETURN(lib models.Library) error {
+func handleRETURN(lib services.LibraryManager) error {
 	fmt.Printf("Enter the ID of the book:")
 	temp, _ := reader.ReadString('\n')
 	bookId, _ := strconv.ParseInt(temp, 10, 64)
@@ -80,12 +81,12 @@ func handleRETURN(lib models.Library) error {
 	}
 	return nil
 }
-func handleAVAILABLE(lib models.Library) error {
+func handleAVAILABLE(lib services.LibraryManager) error {
 	lib.ListAvailableBooks()
 	return nil
 }
 
-func handleUNAVAILABLE(lib models.Library) error {
+func handleUNAVAILABLE(lib services.LibraryManager) error {
 	fmt.Print("Enter your ID:")
 	temp, _ := reader.ReadString('\n')
 	memberId, _ := strconv.ParseInt(temp, 10, 64)
@@ -93,7 +94,7 @@ func handleUNAVAILABLE(lib models.Library) error {
 	return nil
 }
 
-func handleQUIT(lib models.Library) error {
+func handleQUIT(lib services.LibraryManager) error {
 	os.Exit(0)
 	return nil
 }
@@ -108,7 +109,7 @@ var availableCommands = map[string]string{
 	"Quit out of the system":           "QUIT",
 }
 
-var CommandtoHandler = map[string]func(models.Library) error{
+var CommandtoHandler = map[string]func(services.LibraryManager) error{
 	"ADD":         handleADD,
 	"REMOVE":      handleREMOVE,
 	"BORROW":      handleBORROW,
@@ -130,7 +131,7 @@ func GetInput(input string) (cmd string, err error) {
 	return words[0], nil
 }
 
-func Run(lib *models.Library) error {
+func Run(lib *services.LibraryManager) error {
 	fmt.Println("Hello there, this is a library managment system.")
 	fmt.Println("Here are the available commands in this library:")
 	maxDescWidth := 0
